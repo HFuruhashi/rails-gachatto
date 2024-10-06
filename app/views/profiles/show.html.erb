@@ -1,0 +1,18 @@
+<h1><%= @user.username %>さんのプロフィール</h1>
+
+<% if @profile.avatar.attached? %>
+  <%= image_tag @profile.avatar.variant(resize_to_limit: [200, 200]) %>
+<% else %>
+  <i class="fas fa-user-circle fa-5x"></i>
+<% end %>
+
+<p><strong>自己紹介:</strong></p>
+<p><%= @profile.bio.presence || '未設定' %></p>
+
+<% if @profile.website.present? %>
+  <p><strong>ウェブサイト:</strong> <%= link_to @profile.website, @profile.website, target: '_blank' %></p>
+<% end %>
+
+<% if user_signed_in? && current_user == @user %>
+  <%= link_to 'プロフィールを編集', edit_user_profile_path(@user), class: 'btn btn-primary' %>
+<% end %>

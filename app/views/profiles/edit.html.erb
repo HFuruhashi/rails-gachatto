@@ -1,0 +1,28 @@
+<h1>プロフィールを編集</h1>
+
+<%= form_with(model: [@user, @profile], local: true) do |f| %>
+  <div class="field">
+    <%= f.label :bio, '自己紹介' %><br>
+    <%= f.text_area :bio, rows: 5 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :website, 'ウェブサイト' %><br>
+    <%= f.text_field :website %>
+  </div>
+
+  <div class="field">
+    <%= f.label :avatar, 'アバター画像' %><br>
+    <%= f.file_field :avatar %>
+    <% if @profile.avatar.attached? %>
+      <p>現在のアバター:</p>
+      <%= image_tag @profile.avatar.variant(resize_to_limit: [200, 200]) %>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit '更新する', class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+<%= link_to 'キャンセル', user_profile_path(@user), class: 'btn btn-secondary' %>
