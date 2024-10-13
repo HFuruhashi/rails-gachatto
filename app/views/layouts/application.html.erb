@@ -6,16 +6,16 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
   </head>
 
   <body>
     <% flash.each do |key, message| %>
       <div class="alert alert-<%= key %>"><%= message %></div>
     <% end %>
-    
+
     <%= yield %>
 
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application' %>
   </body>
 </html>

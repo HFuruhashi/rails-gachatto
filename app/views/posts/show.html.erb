@@ -1,2 +1,21 @@
-<h1>Posts#show</h1>
-<p>Find me in app/views/posts/show.html.erb</p>
+<h1><%= @post.title %></h1>
+
+<p><%= simple_format(@post.description) %></p>
+
+<% if @post.is_a?(Illustration) %>
+  <% if @post.file.attached? %>
+    <%= image_tag @post.file, style: 'max-width: 600px;' %>
+  <% end %>
+<% elsif @post.is_a?(Music) %>
+  <% if @post.file.attached? %>
+    <%= audio_tag url_for(@post.file), controls: true %>
+  <% end %>
+<% end %>
+
+<p><strong>タグ:</strong> <%= @post.tag_list.join(', ') %></p>
+<p><strong>投稿者:</strong> <%= link_to @post.user.username, user_profile_path(@post.user) %></p>
+
+<% if user_signed_in? && current_user == @post.user %>
+  <%= link_to '編集', edit_post_path(@post), class: 'btn btn-primary' %>
+  <%= link_to '削除', post_path(@post), method: :delete, data: { confirm: '本当に削除してよろしいですか？' }, class: 'btn btn-danger' %>
+<% end %>

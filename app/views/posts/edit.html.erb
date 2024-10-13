@@ -1,2 +1,48 @@
-<h1>Posts#edit</h1>
-<p>Find me in app/views/posts/edit.html.erb</p>
+<h1><%= @post.is_a?(Illustration) ? 'イラスト編集' : '音楽編集' %></h1>
+
+<%= form_with(model: @post, url: post_path(@post), scope: :post, local: true) do |form| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, '個のエラー') %>が発生しました。</h2>
+      <ul>
+        <% @post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :type %>
+
+  <div class="field">
+    <%= form.label :title, 'タイトル' %><br>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description, '説明' %><br>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :file, @post.is_a?(Illustration) ? '画像ファイル' : '音楽ファイル' %><br>
+    <%= form.file_field :file %>
+    <% if @post.file.attached? %>
+      <p>現在のファイル:</p>
+      <% if @post.is_a?(Illustration) %>
+        <%= image_tag @post.file, style: 'max-width: 300px;' %>
+      <% elsif @post.is_a?(Music) %>
+        <%= audio_tag url_for(@post.file), controls: true %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= form.label :tag_list, 'タグ（カンマ区切り）' %><br>
+    <%= form.text_field :tag_list %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit '更新する' %>
+  </div>
+<% end %>

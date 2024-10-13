@@ -1,2 +1,40 @@
-<h1>Posts#new</h1>
-<p>Find me in app/views/posts/new.html.erb</p>
+<h1><%= @post.is_a?(Illustration) ? 'イラスト投稿' : '音楽投稿' %></h1>
+
+<%= form_with(model: @post, url: posts_path, scope: :post, local: true) do |form| %>
+  <%= form.hidden_field :type %>
+
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, '個のエラー') %>が発生しました。</h2>
+      <ul>
+        <% @post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title, 'タイトル' %><br>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description, '説明' %><br>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :file, @post.is_a?(Illustration) ? '画像ファイル' : '音楽ファイル' %><br>
+    <%= form.file_field :file %>
+  </div>
+
+  <div class="field">
+    <%= form.label :tag_list, 'タグ（カンマ区切り）' %><br>
+    <%= form.text_field :tag_list %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit '投稿する' %>
+  </div>
+<% end %>

@@ -1,2 +1,14 @@
-<h1>Posts#index</h1>
-<p>Find me in app/views/posts/index.html.erb</p>
+<h1>投稿一覧</h1>
+
+<p>
+  <%= link_to '新規イラスト投稿', new_post_with_type_path(type: 'Illustration') %> |
+  <%= link_to '新規音楽投稿', new_post_with_type_path(type: 'Music') %>
+</p>
+
+<ul>
+  <% @posts.each do |post| %>
+    <li>
+      <%= link_to post.title, post_path(post) %> - <%= post.user.username %> - <%= l(post.created_at, format: :short) %>
+    </li>
+  <% end %>
+</ul>
