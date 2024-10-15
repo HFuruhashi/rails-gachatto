@@ -15,6 +15,46 @@
 <p><strong>タグ:</strong> <%= @post.tag_list.join(', ') %></p>
 <p><strong>投稿者:</strong> <%= link_to @post.user.username, user_profile_path(@post.user) %></p>
 
+<p>
+  <strong>「いいね！」数:</strong> <span id="like-count"><%= @post.likes.count %></span>
+</p>
+
+<% if user_signed_in? %>
+  <div class="like-button">
+    <%= render partial: 'likes/like_button', locals: { post: @post } %>
+  </div>
+<% else %>
+  <p>「いいね！」するには、<%= link_to 'ログイン', new_user_session_path %>が必要です。</p>
+<% end %>
+
+<h2>コメント</h2>
+<% @post.comments.each do |comment| %>
+  <div class="comment">
+    <p>
+      <strong><%= comment.user.username %>:</strong>
+      <%= simple_format(comment.content) %>
+    </p>
+    <% if user_signed_in? && comment.user == current_user %>
+      <%= link_to '削除', post_comment_path(@post, comment), method: :delete, data: { confirm: 'コメントを削除しますか？' } %>
+    <% end %>
+  </div>
+<% end %>
+
+<!-- コメント投稿フォーム -->
+<% if user_signed_in? %>
+  <%= form_with(model: Comment.new, url: post_comments_path(@post), local: true) do |form| %>
+    <div class="field">
+      <%= form.label :content, 'コメントを投稿する' %><br>
+      <%= form.text_area :content %>
+    </div>
+    <div class="actions">
+      <%= form.submit '投稿する' %>
+    </div>
+  <% end %>
+<% else %>
+  <p>コメントを投稿するには、<%= link_to 'ログイン', new_user_session_path %>が必要です。</p>
+<% end %>
+
 <% if user_signed_in? && current_user == @post.user %>
   <%= link_to '編集', edit_post_path(@post), class: 'btn btn-primary' %>
   <%= link_to '削除', post_path(@post), method: :delete, data: { confirm: '本当に削除してよろしいですか？' }, class: 'btn btn-danger' %>

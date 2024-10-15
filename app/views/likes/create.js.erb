@@ -1,0 +1,4 @@
+// いいね！ボタンを更新
+document.querySelector('.like-button').innerHTML = `<%= j(render partial: 'like_button', locals: { post: @post }) %>`;
+// いいね！数を更新
+document.querySelector('#like-count').innerText = '<%= @post.likes.count %>';

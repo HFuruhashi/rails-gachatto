@@ -3,6 +3,9 @@ class Post < ApplicationRecord
   belongs_to :user
   # ファイルアップロード機能（後述）
   has_one_attached :file
+
+  has_many :comments, dependent: :destroy
+  has_many :likes, dependent: :destroy
   # タグ機能（後述）
   acts_as_taggable_on :tags
 
