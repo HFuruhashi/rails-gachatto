@@ -2,6 +2,7 @@
 
 <%= form_with(model: @post, url: posts_path, scope: :post, local: true) do |form| %>
   <%= form.hidden_field :type %>
+  <%= form.hidden_field :parent_post_id %>
 
   <% if @post.errors.any? %>
     <div id="error_explanation">

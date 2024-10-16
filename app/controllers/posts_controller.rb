@@ -2,6 +2,7 @@ class PostsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   before_action :authorize_user!, only: [:edit, :update, :destroy]
+  before_action :set_parent_post, only: [:new, :create]
 
   def index
     @posts = Post.all.order(created_at: :desc)
@@ -14,6 +15,7 @@ class PostsController < ApplicationController
     permitted_types = ['Illustration', 'Music']
     if permitted_types.include?(params[:type])
       @post = params[:type].constantize.new
+      @post.parent_post = @parent_post if @parent_post
     else
       redirect_to root_path, alert: '不正な投稿タイプです。'
     end
@@ -25,6 +27,7 @@ class PostsController < ApplicationController
     if permitted_types.include?(post_type)
       @post = post_type.constantize.new(post_params)
       @post.user = current_user
+      @post.parent_post = @parent_post if @parent_post
       if @post.save
         redirect_to post_path(@post), notice: '投稿が作成されました。'
       else
@@ -54,12 +57,18 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :description, :file, :tag_list)
+    params.require(:post).permit(:title, :description, :file, :tag_list, :parent_post_id)
   end
 
   def set_post
     @post = Post.find(params[:id])
   end
+
+  def set_parent_post
+    parent_post_id = params[:parent_post_id] || params.dig(:post, :parent_post_id)
+    @parent_post = Post.find_by(id: parent_post_id)
+  end
+
 
   def authorize_user!
     unless @post.user == current_user

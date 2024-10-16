@@ -15,6 +15,28 @@
 <p><strong>タグ:</strong> <%= @post.tag_list.join(', ') %></p>
 <p><strong>投稿者:</strong> <%= link_to @post.user.username, user_profile_path(@post.user) %></p>
 
+<% if @post.parent_post %>
+  <h3>元の作品</h3>
+  <p>
+    <%= link_to @post.parent_post.title, post_path(@post.parent_post) %> by <%= @post.parent_post.user.username %>
+  </p>
+<% end %>
+
+<% if @post.child_posts.any? %>
+  <h3>この作品に紐づけられた作品</h3>
+  <% @post.child_posts.each do |child_post| %>
+    <p>
+      <%= link_to child_post.title, post_path(child_post) %> by <%= child_post.user.username %>
+    </p>
+  <% end %>
+<% end %>
+
+<% if user_signed_in? %>
+  <h3>この作品に紐づけて投稿する</h3>
+  <%= link_to 'イラストを投稿', new_post_with_type_path(type: 'Illustration', parent_post_id: @post.id), class: 'btn btn-secondary' %>
+  <%= link_to '音楽を投稿', new_post_with_type_path(type: 'Music', parent_post_id: @post.id), class: 'btn btn-secondary' %>
+<% end %>
+
 <p>
   <strong>「いいね！」数:</strong> <span id="like-count"><%= @post.likes.count %></span>
 </p>
