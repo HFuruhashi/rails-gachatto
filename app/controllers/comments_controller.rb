@@ -6,6 +6,8 @@ class CommentsController < ApplicationController
 	  @comment = @post.comments.build(comment_params)
 	  @comment.user = current_user
 	  if @comment.save
+		# 通知の作成
+		@post.create_notification_comment!(current_user, @comment.id)
 		redirect_to post_path(@post), notice: 'コメントが投稿されました。'
 	  else
 		redirect_to post_path(@post), alert: 'コメントの投稿に失敗しました。'

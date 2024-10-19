@@ -1,0 +1,26 @@
+<h1>通知一覧</h1>
+
+<% if @notifications.any? %>
+  <ul>
+    <% @notifications.each do |notification| %>
+      <li style="<%= 'background-color: #eef;' unless notification.checked %>">
+        <!-- 通知内容 -->
+        <% visitor = notification.visitor %>
+        <% case notification.action %>
+        <% when 'like' %>
+          <%= link_to visitor.username, user_path(visitor) %>さんが
+          <%= link_to 'あなたの投稿', post_path(notification.post) %>に「いいね！」しました。
+        <% when 'comment' %>
+          <%= link_to visitor.username, user_path(visitor) %>さんが
+          <%= link_to 'あなたの投稿', post_path(notification.post) %>にコメントしました。
+        <% when 'link' %>
+          <%= link_to visitor.username, user_path(visitor) %>さんが
+          <%= link_to 'あなたの投稿', post_path(notification.post) %>に紐づけて投稿しました。
+        <% end %>
+        <span><%= time_ago_in_words(notification.created_at) %>前</span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>通知はありません。</p>
+<% end %>

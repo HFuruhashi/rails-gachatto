@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     resource :like, only: [:create, :destroy]
   end
 
+  resources :notifications, only: [:index]
+
   # 新規投稿ページへのルート
   get 'posts/new/:type', to: 'posts#new', as: 'new_post_with_type'
 

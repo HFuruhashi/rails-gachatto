@@ -5,6 +5,8 @@ class LikesController < ApplicationController
 	def create
 	  @like = @post.likes.build(user: current_user)
 	  if @like.save
+		# 通知の作成
+		@post.create_notification_like!(current_user)
 		respond_to do |format|
 		  format.html { redirect_to post_path(@post), notice: '「いいね！」しました。' }
 		  format.js

@@ -29,6 +29,8 @@ class PostsController < ApplicationController
       @post.user = current_user
       @post.parent_post = @parent_post if @parent_post
       if @post.save
+        # 通知の作成
+        @post.create_notification_link!(current_user) if @parent_post
         redirect_to post_path(@post), notice: '投稿が作成されました。'
       else
         render :new

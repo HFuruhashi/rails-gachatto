@@ -10,6 +10,22 @@
   </head>
 
   <body>
+    <!-- ナビゲーションバーなどのヘッダー部分 -->
+    <br />
+    <nav>
+      <% if user_signed_in? %>
+        <!-- 他のリンク -->
+        <%= link_to '通知', notifications_path %>
+        <% if current_user.unchecked_notifications.any? %>
+          <span class="badge"><%= current_user.unchecked_notifications.count %></span>
+        <% end %>
+        <%= link_to 'ログアウト', destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to 'ログイン', new_user_session_path %>
+        <%= link_to 'サインアップ', new_user_registration_path %>
+      <% end %>
+    </nav>
+
     <% flash.each do |key, message| %>
       <div class="alert alert-<%= key %>"><%= message %></div>
     <% end %>
