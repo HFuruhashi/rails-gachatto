@@ -11,7 +11,9 @@ class Post < ApplicationRecord
   # タグ機能（後述）
   acts_as_taggable_on :tags
 
-  validates :title, presence: true
+  # バリデーションの追加
+  validates :title, presence: true, length: { maximum: 100 }
+  validates :description, length: { maximum: 1000 }
 
   def create_notification_comment!(current_user, comment_id)
     # 自分の投稿に対するコメントの場合は通知を作成しない

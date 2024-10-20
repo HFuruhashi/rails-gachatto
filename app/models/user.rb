@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :active_notifications, class_name: 'Notification', foreign_key: 'visitor_id', dependent: :destroy
   # 自分が受け取った通知
   has_many :passive_notifications, class_name: 'Notification', foreign_key: 'visited_id', dependent: :destroy
+  
+  validates :username, presence: true, uniqueness: true, length: { maximum: 30 }
 
   after_create :create_profile
 
