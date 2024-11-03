@@ -1,0 +1,42 @@
+<!-- app/views/shared/_navbar.html.erb -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <%= link_to 'Gachatto', root_path, class: 'navbar-brand' %>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="ナビゲーションの切替">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to '投稿一覧', posts_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to '新規投稿', new_post_with_type_path(type: 'Illustration'), class: 'nav-link' %>
+          </li>
+          <li class="nav-item position-relative">
+            <%= link_to '通知', notifications_path, class: 'nav-link' %>
+            <% if current_user.unchecked_notifications.any? %>
+              <span class="badge badge-danger position-absolute" style="top: 0; right: 0; transform: translate(50%, -50%);"><%= current_user.unchecked_notifications.count %></span>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'マイページ', user_profile_path(current_user), class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link' %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to 'ログイン', new_user_session_path, class: 'nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'サインアップ', new_user_registration_path, class: 'nav-link' %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

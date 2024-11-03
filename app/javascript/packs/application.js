@@ -9,9 +9,13 @@ import * as ActiveStorage from "@rails/activestorage"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "channels"
 import 'bootstrap'
+import '../stylesheets/application';
 import 'bootstrap/dist/css/bootstrap'
 import './posts';
 require('jquery')
+
+import $ from 'jquery';
+window.$ = $;
 
 Rails.start()
 // Turbolinks.start()

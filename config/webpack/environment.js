@@ -16,4 +16,10 @@ environment.loaders.append('file', {
   ],
 })
 
+// Sass ファイルを処理するための設定を追加
+const sassLoader = environment.loaders.get('sass');
+sassLoader.use.find(item => item.loader === 'sass-loader').options = {
+  implementation: require('sass'),
+};
+
 module.exports = environment

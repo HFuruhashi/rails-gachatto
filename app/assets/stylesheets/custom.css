@@ -1,0 +1,12 @@
+/* フッターを固定する場合 */
+.footer {
+	background-color: #f8f9fa;
+	padding: 1rem 0;
+}
+
+/* バッジの位置とスタイルを調整 */
+.navbar .nav-item .badge {
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}

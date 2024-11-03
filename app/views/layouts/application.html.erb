@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>RailsGachatto</title>
+    <title>Gachatto</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -10,34 +10,24 @@
   </head>
 
   <body>
-    <!-- ナビゲーションバーなどのヘッダー部分 -->
-    <header>
-      <br>
-      <nav>
-        <% if user_signed_in? %>
-          <%= link_to 'ホーム', root_path %>
-          <%= link_to '投稿一覧', posts_path %>
-          <%= link_to '新規投稿', new_post_with_type_path(type: 'Illustration') %>
-          <%= link_to '通知', notifications_path %>
-          <% if current_user.unchecked_notifications.any? %>
-            <span class="badge"><%= current_user.unchecked_notifications.count %></span>
-          <% end %>
-          <%= link_to 'マイページ', user_profile_path(current_user) %>
-          <%= link_to 'ログアウト', destroy_user_session_path, method: :delete %>
-        <% else %>
-          <%= link_to 'ホーム', root_path %>
-          <%= link_to '投稿一覧', posts_path %>
-          <%= link_to 'ログイン', new_user_session_path %>
-          <%= link_to 'サインアップ', new_user_registration_path %>
+    <div class="d-flex flex-column min-vh-100">
+      <%= render 'shared/navbar' %>
+
+      <div class="container mt-4">
+        <% flash.each do |key, message| %>
+          <div class="alert alert-<%= key == 'notice' ? 'success' : 'danger' %> alert-dismissible fade show" role="alert">
+            <%= message %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="閉じる">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
         <% end %>
-      </nav>
-    </header>
 
-    <% flash.each do |key, message| %>
-      <div class="alert alert-<%= key %>"><%= message %></div>
-    <% end %>
+        <%= yield %>
+      </div>
 
-    <%= yield %>
+      <%= render 'shared/footer' %>
+    </div>
 
     <%= javascript_pack_tag 'application' %>
   </body>
