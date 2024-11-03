@@ -1,41 +1,51 @@
-<h1><%= @post.is_a?(Illustration) ? 'イラスト投稿' : '音楽投稿' %></h1>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h2><%= @post.is_a?(Illustration) ? 'イラスト投稿' : '音楽投稿' %></h2>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: @post, url: posts_path, scope: :post, local: true, html: { multipart: true }) do |form| %>
+            <%= form.hidden_field :type %>
+            <%= form.hidden_field :parent_post_id %>
 
-<%= form_with(model: @post, url: posts_path, scope: :post, local: true) do |form| %>
-  <%= form.hidden_field :type %>
-  <%= form.hidden_field :parent_post_id %>
+            <% if @post.errors.any? %>
+              <div class="alert alert-danger">
+                <ul>
+                  <% @post.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
 
-  <% if @post.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@post.errors.count, '個のエラー') %>が発生しました。</h2>
-      <ul>
-        <% @post.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+            <div class="form-group">
+              <%= form.label :title, 'タイトル' %>
+              <%= form.text_field :title, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :description, '説明' %>
+              <%= form.text_area :description, class: 'form-control', rows: 5 %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :file, @post.is_a?(Illustration) ? '画像ファイル' : '音楽ファイル' %>
+              <%= form.file_field :file, class: 'form-control-file' %>
+            </div>
+
+            <div class="form-group">
+              <%= form.label :tag_list, 'タグ（カンマ区切り）' %>
+              <%= form.text_field :tag_list, class: 'form-control' %>
+            </div>
+
+            <div class="form-group text-center">
+              <%= form.submit '投稿する', class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :title, 'タイトル' %><br>
-    <%= form.text_field :title %>
   </div>
-
-  <div class="field">
-    <%= form.label :description, '説明' %><br>
-    <%= form.text_area :description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :file, @post.is_a?(Illustration) ? '画像ファイル' : '音楽ファイル' %><br>
-    <%= form.file_field :file %>
-  </div>
-
-  <div class="field">
-    <%= form.label :tag_list, 'タグ（カンマ区切り）' %><br>
-    <%= form.text_field :tag_list %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit '投稿する' %>
-  </div>
-<% end %>
+</div>
