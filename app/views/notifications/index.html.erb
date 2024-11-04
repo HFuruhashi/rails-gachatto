@@ -1,26 +1,55 @@
-<h1>通知一覧</h1>
+<div class="container mt-4">
+  <h2>通知一覧</h2>
 
-<% if @notifications.any? %>
-  <ul>
-    <% @notifications.each do |notification| %>
-      <li style="<%= 'background-color: #eef;' unless notification.checked %>">
-        <!-- 通知内容 -->
+  <% if @notifications.any? %>
+    <ul class="list-group">
+      <% @notifications.each do |notification| %>
         <% visitor = notification.visitor %>
-        <% case notification.action %>
-        <% when 'like' %>
-          <%= link_to visitor.username, user_path(visitor) %>さんが
-          <%= link_to 'あなたの投稿', post_path(notification.post) %>に「いいね！」しました。
-        <% when 'comment' %>
-          <%= link_to visitor.username, user_path(visitor) %>さんが
-          <%= link_to 'あなたの投稿', post_path(notification.post) %>にコメントしました。
-        <% when 'link' %>
-          <%= link_to visitor.username, user_path(visitor) %>さんが
-          <%= link_to 'あなたの投稿', post_path(notification.post) %>に紐づけて投稿しました。
-        <% end %>
-        <span><%= time_ago_in_words(notification.created_at) %>前</span>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>通知はありません。</p>
-<% end %>
+        <% action_message = case notification.action
+          when 'like'
+            'あなたの投稿に「いいね！」しました。'
+          when 'comment'
+            'あなたの投稿にコメントしました。'
+          when 'link'
+            'あなたの投稿に紐づけて投稿しました。'
+        end %>
+
+        <% link_path = case notification.action
+          when 'like', 'comment', 'link'
+            post_path(notification.post)
+          else
+            '#'
+        end %>
+
+        <% icon_class = case notification.action
+          when 'like'
+            'fas fa-heart text-danger'
+          when 'comment'
+            'fas fa-comment text-primary'
+          when 'link'
+            'fas fa-link text-success'
+          else
+            'fas fa-info-circle'
+        end %>
+
+        <li class="list-group-item <%= 'bg-light' unless notification.checked %>">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <i class="<%= icon_class %> mr-2"></i>
+              <strong>
+                <%= link_to visitor.username, user_profile_path(visitor), class: 'text-decoration-none' %>
+              </strong>
+              <span><%= action_message %></span>
+            </div>
+            <div class="text-right">
+              <small class="text-muted d-block"><%= time_ago_in_words(notification.created_at) %>前</small>
+              <%= link_to '詳細を見る', link_path, class: 'btn btn-sm btn-link p-0' %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-muted">通知はありません。</p>
+  <% end %>
+</div>
