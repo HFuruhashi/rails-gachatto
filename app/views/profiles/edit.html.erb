@@ -1,28 +1,50 @@
-<h1>プロフィールを編集</h1>
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h2>プロフィールを編集</h2>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: [@user, @profile], local: true, html: { multipart: true }) do |f| %>
+            <% if @profile.errors.any? %>
+              <div class="alert alert-danger">
+                <ul>
+                  <% @profile.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
 
-<%= form_with(model: [@user, @profile], local: true) do |f| %>
-  <div class="field">
-    <%= f.label :bio, '自己紹介' %><br>
-    <%= f.text_area :bio, rows: 5 %>
+            <div class="form-group">
+              <%= f.label :bio, '自己紹介' %>
+              <%= f.text_area :bio, class: 'form-control', rows: 5 %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :website, 'ウェブサイト' %>
+              <%= f.text_field :website, class: 'form-control' %>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :avatar, 'アバター画像' %>
+              <%= f.file_field :avatar, class: 'form-control-file' %>
+              <% if @profile.avatar.attached? %>
+                <p class="mt-3">現在のアバター:</p>
+                <%= image_tag @profile.avatar.variant(resize_to_fill: [150, 150]), class: 'rounded-circle' %>
+              <% else %>
+                <i class="fas fa-user-circle fa-7x text-muted mt-3"></i>
+              <% end %>
+            </div>
+
+            <div class="form-group text-center">
+              <%= f.submit '更新する', class: 'btn btn-primary' %>
+              <%= link_to 'キャンセル', user_profile_path(@user), class: 'btn btn-secondary ml-2' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="field">
-    <%= f.label :website, 'ウェブサイト' %><br>
-    <%= f.text_field :website %>
-  </div>
-
-  <div class="field">
-    <%= f.label :avatar, 'アバター画像' %><br>
-    <%= f.file_field :avatar %>
-    <% if @profile.avatar.attached? %>
-      <p>現在のアバター:</p>
-      <%= image_tag @profile.avatar.variant(resize_to_limit: [200, 200]) %>
-    <% end %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit '更新する', class: 'btn btn-primary' %>
-  </div>
-<% end %>
-
-<%= link_to 'キャンセル', user_profile_path(@user), class: 'btn btn-secondary' %>
+</div>

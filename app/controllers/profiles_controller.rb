@@ -5,8 +5,11 @@ class ProfilesController < ApplicationController
   before_action :correct_user, only: [:edit, :update]
 
   def show
-    # プロフィール表示用のアクション
+    @user = User.find(params[:user_id])
+    @profile = @user.profile
+    @posts = @user.posts.order(created_at: :desc)
   end
+
 
   def edit
     # プロフィール編集フォーム表示用のアクション
